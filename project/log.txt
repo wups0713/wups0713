@@ -1,0 +1,20 @@
+20 labeled items in 48 images, 21 items detected.
+Average Precision = 0.745000
+IOU highest = 0.938784, lowest = 0.335039, average = 0.764365
+Spend time: 4.873927
+
+27 labeled items in 47 images, 27 items detected.
+Average Precision = 0.666667
+IOU highest = 0.910343, lowest = 0.356296, average = 0.725402
+Spend time: 4.296069
+
+18 labeled items in 46 images, 18 items detected.
+Average Precision = 1.000000
+IOU highest = 0.869697, lowest = 0.518157, average = 0.752736
+Spend time: 4.077290
+
+25 labeled items in 42 images, 25 items detected.
+Average Precision = 1.000000
+IOU highest = 0.946899, lowest = 0.557290, average = 0.787033
+Spend time: 3.561662
+

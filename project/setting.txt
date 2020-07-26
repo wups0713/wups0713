@@ -1,0 +1,20 @@
+[arguments]
+load_label = 1					# load label data
+print_info = 0                                  # print class name & IOU
+do_person = 0					# predict person
+store_result = 0                                # store results to <result_dir>
+show_result = 1                                 # show results after prediction
+write_log = 0                                   # writing log
+data_type = 0                                   # 0 for image, 1 for video
+output_txt = 0                                  # output prediction txt
+
+[image]
+draw_label = 1                                  # draw label bounding box
+draw_predict = 1                                # draw prediction bounding box
+img_size = 800                                  # output image size
+
+[video]
+video_path = test/CLIP_20191009-152413.mp4              # path to video
+
+[result]
+result_dir = result/		# path to the dir where you want results be generated

@@ -1,0 +1,4 @@
+classes= 1
+names = setting/my.names
+backup = test/project_cfg/backup/
+
