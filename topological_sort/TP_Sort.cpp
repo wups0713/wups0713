@@ -45,7 +45,7 @@ void DFS (node nodes [], int node_count, ofstream &outfile)
 int main (void)
 {
 	ifstream infile ("sample data.txt");
-	ofstream outfile ("TP_Sort_0516049.txt");
+	ofstream outfile ("TP_Sort.txt");
 	int node_count = 0;
 	while (infile >> node_count)
 	{
