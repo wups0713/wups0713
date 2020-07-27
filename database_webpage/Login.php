@@ -22,7 +22,7 @@
                 $db_host = "dbhome.cs.nctu.edu.tw";
                 $db_name = "wups0713_cs_HW3";
                 $db_user = "wups0713_cs";
-                $db_password = "aa066889";
+                $db_password = "********";
                 $db = new mysqli ($db_host, $db_user, $db_password, $db_name);
                 $account = $_POST ["account_"];
                 $password = hash ("sha256", $_POST ["password_"]);

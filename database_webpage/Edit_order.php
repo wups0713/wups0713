@@ -17,7 +17,7 @@
         $db_host = "dbhome.cs.nctu.edu.tw";
         $db_name = "wups0713_cs_HW3";
         $db_user = "wups0713_cs";
-        $db_password = "aa066889";
+        $db_password = "********";
         $check_in_temp = "";
         $check_out_temp = "";
         $error_text = "";
