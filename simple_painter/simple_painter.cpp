@@ -5,6 +5,7 @@
 
 enum Shape {line, rec, circle, ellipse};
 
+// for wnd_proc
 Window *window = NULL;
 
 LRESULT CALLBACK Window::wnd_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param) {
@@ -31,6 +32,7 @@ LRESULT CALLBACK Window::wnd_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_
 			window->on_select(LOWORD(w_param));
 			break;
 		case WM_HOTKEY:
+			// deal with hotkey
 			window->on_hotkey(LOWORD(w_param));
 			break;
 		case WM_LBUTTONDOWN:
@@ -54,6 +56,7 @@ LRESULT CALLBACK Window::wnd_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_
 Window::Window(HINSTANCE h_instance, int n_cmdshow) {
 	window = this;
 
+	// custom class info
 	wc.cbClsExtra = 0;
 	wc.cbSize = sizeof(WNDCLASSEX);
 	wc.cbWndExtra = 0;
@@ -67,11 +70,13 @@ Window::Window(HINSTANCE h_instance, int n_cmdshow) {
 	wc.lpszMenuName = NULL;
 	wc.style = 0;
 
+	// regist class
 	if (!RegisterClassEx(&wc)) {
 		MessageBox(NULL, L"Window registration failed!", L"Error!", MB_ICONEXCLAMATION | MB_OK);
 		exit(-1);
 	}
 
+	// create main window
 	HWND hwnd_tmp = CreateWindowEx(
 		0,
 		(WCHAR *)my_class_name,
@@ -106,6 +111,7 @@ Window::Window(HINSTANCE h_instance, int n_cmdshow) {
 	pen[ellipse] = CreatePen(PS_SOLID, 5, RGB(0, 0, 0));
 	brush = (HBRUSH)GetStockObject(NULL_BRUSH);
 
+	// show window and repaint the whole window
 	ShowWindow(hwnd, n_cmdshow);
 	InvalidateRect(hwnd, NULL, false);
 
@@ -114,6 +120,7 @@ Window::Window(HINSTANCE h_instance, int n_cmdshow) {
 	RegisterHotKey(hwnd, 101, MOD_CONTROL, 'Y');
 }
 
+// when Lbutton down, check if mouse is in drawing board, if true then create a new shape in dwaring list
 void Window::on_mouse_ldown() {
 	if (mouse.y > 50 && mouse.y < 410) {
 		(*now)->shape = shape;
@@ -123,6 +130,7 @@ void Window::on_mouse_ldown() {
 	}
 }
 
+// when Lbutton up, check during drawing or not, if true then save mouse position to node->end, stop drawing and move to next node
 void Window::on_mouse_lup() {
 	if (drawing) {
 		(*now)->end.x = mouse.x;	(*now)->end.y = mouse.y;
@@ -145,6 +153,7 @@ void Window::on_mouse_lup() {
 	}
 }
 
+// when window resize. change window's size
 void Window::on_resize() {
 	GetWindowRect(hwnd, &win_pos);
 	GetClientRect(hwnd, &win_size);
@@ -160,6 +169,7 @@ void Window::on_resize() {
 	InvalidateRect(hwnd, NULL, true);
 }
 
+// when user press the buttons, determine which button did user press
 void Window::on_select(int selected) {
 	switch (shape = selected) {
 	case line:
@@ -179,6 +189,7 @@ void Window::on_select(int selected) {
 	}
 }
 
+// draw the drawing board
 void Window::draw() {
 	PAINTSTRUCT ps;
 	BeginPaint(board, &ps);
@@ -214,9 +225,10 @@ void Window::draw() {
 	}
 
 	EndPaint(board, &ps);
-	Sleep(30);
+	//Sleep(30);
 }
 
+// init buttons
 void Window::create_buttons() {
 	button[line] = CreateWindowEx(WS_EX_CLIENTEDGE,
 		L"button",
@@ -270,6 +282,7 @@ void Window::create_buttons() {
 #endif // DEBUG
 }
 
+// init the window for mouse coordinate
 void Window::create_coordinate() {
 	GetClientRect(hwnd, &win_size);
 
@@ -304,18 +317,21 @@ void Window::create_coordinate() {
 		hwnd, NULL, NULL, NULL);
 }
 
+// for debug
 void Window::test_action(LPCWSTR buf) {
 #ifdef DEBUG
 	SetWindowTextW(test, buf);
 #endif // DEBUG
 }
 
+// get the mouse position in the window
 void Window::get_mouse_pos() {
 	// get mouse position
 	GetCursorPos(&mouse);
 	ScreenToClient(hwnd, &mouse);
 }
 
+// undo
 void Window::undo() {
 	if (now != draw_list.begin() && now_index > max_index - 10) {
 		now = std::prev(now);
@@ -324,6 +340,7 @@ void Window::undo() {
 	}
 }
 
+// redo
 void Window::redo() {
 	if ((*now)->shape != -1) {
 		(*now)->undo = false;
@@ -332,6 +349,7 @@ void Window::redo() {
 	}
 }
 
+// when user press hotkey, determine which hotkey did user press
 void Window::on_hotkey(int hotkey) {
 	switch (hotkey) {
 	case 100:
@@ -344,10 +362,13 @@ void Window::on_hotkey(int hotkey) {
 	InvalidateRect(board, NULL, true);
 }
 
+// when mouse moves, get mouse's position and show in coordinate window
 void Window::on_mouse_move() {
 	get_mouse_pos();
 
-	(*now)->end.x = mouse.x;	(*now)->end.y = mouse.y;
+	if ((*now)->undo == false) {
+		(*now)->end.x = mouse.x;	(*now)->end.y = mouse.y;
+	}
 
 	WCHAR buf[10];
 	swprintf(buf, 10, L"%ld", mouse.x);
